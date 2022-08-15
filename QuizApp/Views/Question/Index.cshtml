@@ -1,0 +1,39 @@
+﻿@model IEnumerable<QuizApp.Models.Question>
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>Questions</h4>
+        <a asp-action="Create">Create New</a>
+    </div>
+
+    <div class="card-body">
+        <div class="accordion accordion-flush" id="questionListAccordion">
+            @foreach (var question in Model)
+            {
+                 <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#optionListCollapse-@question.Id" aria-expanded="true" aria-controls="optionListCollapse">
+                        @question.Name - @question.CreatedAtString
+                      </button>
+                    </h2>
+
+                    <div id="optionListCollapse-@question.Id" class="accordion-collapse collapse" aria-labelledby="optionListHeading" data-bs-parent="#questionListAccordion">
+                      <div class="accordion-body">
+                          <ul class="list-group">
+                                @foreach ( var option in question.Options)
+                                {
+                                    <li class="list-group-item d-flex align-items-center">
+                                        @*@Html.CheckBoxFor(model => option.IsCorrect, new { @disabled = "disabled" }) *@
+                                        <input class="form-check-input me-2" type="checkbox" disabled @(option.IsCorrect ? "checked='checked'" : string.Empty) />
+                                        @option.Name
+                                    </li>
+                                }
+                          </ul>                           
+                        </div>
+                    </div>
+                  </div>  
+            }                 
+        </div>
+    </div>
+</div>

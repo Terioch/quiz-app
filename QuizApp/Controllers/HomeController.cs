@@ -1,23 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApp.Contexts;
 using QuizApp.Models;
+using QuizApp.Repositories;
 using System.Diagnostics;
 
 namespace QuizApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;        
+        private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
+
         private static int _score;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
-            _logger = logger;            
+            _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
-        {
-            var question = MockDbContext.Questions.FirstOrDefault();
+        {          
+            var question = _unitOfWork.Questions.Get().FirstOrDefault();
 
             ViewBag.QuestionId = question == null ? -1 : question.Id;
 
@@ -26,17 +30,19 @@ namespace QuizApp.Controllers
 
         public IActionResult Question(int id, int selectedOptionId, bool isStart = false)
         {
-            if (!MockDbContext.Questions.Any())
+            var questions = _unitOfWork.Questions.Get();
+
+            if (!questions.Any())
             {
                 return RedirectToAction("Create");
             }
 
             if (isStart)
             {
-                return View(MockDbContext.Questions.First());
+                return View(questions.First());
             }
 
-            var question = MockDbContext.Questions.FirstOrDefault(x => x.Id == id);
+            var question = questions.FirstOrDefault(x => x.Id == id);
 
             if (question == null)
             {
@@ -51,15 +57,14 @@ namespace QuizApp.Controllers
                 _score++;
             }           
 
-            // Pagination
-            var index = MockDbContext.Questions.IndexOf(question);           
-
-            if (index == MockDbContext.Questions.Count - 1)
+            // Pagination                        
+            if (questions.LastOrDefault().Id == question.Id)
             {                
                 return View("Result", _score);
             }
 
-            var nextQuestion = MockDbContext.Questions.ElementAt(index + 1);
+            //var nextQuestion = questions.ElementAt(index + 1);
+            var nextQuestion = questions.GetEnumerator().MoveNext();
 
             return View(nextQuestion);
         }        

@@ -6,17 +6,23 @@ namespace QuizApp.Models
     {       
         public int Id { get; set; }
 
-        public string Name { get; set; }        
+        public string Name { get; set; }
 
+        [NotMapped]
         public Option OptionA { get; set; }
 
+        [NotMapped]
         public Option OptionB { get; set; }
 
+        [NotMapped]
         public Option OptionC { get; set; }
 
+        [NotMapped]
         public Option OptionD { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
+
+        public virtual List<Option> Options { get; set; }
 
         [NotMapped]
         public string CreatedAtString
@@ -27,13 +33,13 @@ namespace QuizApp.Models
             }
         }
 
-        [NotMapped]
+        /*[NotMapped]
         public List<Option> Options
         {
             get
             {
                 return new List<Option> { OptionA, OptionB, OptionC, OptionD };
             }            
-        }
+        }*/
     }
 }

@@ -8,9 +8,7 @@ namespace QuizApp.Models
 
         public int QuestionId { get; set; }
 
-        public string Name { get; set; }
-
-        public bool IsSelected { get; set; }
+        public string Name { get; set; }        
 
         public bool IsCorrect { get; set; }
 

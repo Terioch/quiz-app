@@ -7,7 +7,50 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group mb-3">
+            <div class="d-flex align-items-end mb-3">
+                <div class="form-group">                
+                    <label class="control-label">Option A</label>
+                    <input asp-for="OptionA.Name" class="form-control" />                   
+                    <span asp-validation-for="OptionA.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    @Html.RadioButton("correctOptionIndex", 0)
+                </div>
+            </div>
+            
+            <div class="d-flex mb-3">
+                <div class="form-group">                
+                    <label class="control-label">Option B</label>
+                    <input asp-for="OptionB.Name" class="form-control" />                   
+                    <span asp-validation-for="OptionB.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    @Html.RadioButton("correctOptionIndex", 1)
+                </div>
+            </div>
+
+            <div class="d-flex mb-3">
+                <div class="form-group">                
+                    <label class="control-label">Option C</label>
+                    <input asp-for="OptionC.Name" class="form-control" />                   
+                    <span asp-validation-for="OptionC.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    @Html.RadioButton("correctOptionIndex", 2)
+                </div>
+            </div>
+
+            <div class="d-flex mb-3">
+                <div class="form-group">                
+                    <label class="control-label">Option D</label>
+                    <input asp-for="OptionD.Name" class="form-control" />                   
+                    <span asp-validation-for="OptionD.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    @Html.RadioButton("correctOptionIndex", 3)
+                </div>
+            </div>
+            @*<div class="form-group mb-3">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -31,7 +74,7 @@
                 <label class="control-label">Option D</label>
                 <input asp-for="OptionD.Name" class="form-control" />
                 <span asp-validation-for="OptionD.Name" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group mb-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

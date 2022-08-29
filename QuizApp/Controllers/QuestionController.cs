@@ -1,11 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApp.Contexts;
 using QuizApp.Models;
+using QuizApp.Repositories;
 
 namespace QuizApp.Controllers
 {
     public class QuestionController : Controller
     {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public QuestionController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         public IActionResult Index()
         {                 
             return View(MockDbContext.Questions);
@@ -18,54 +26,32 @@ namespace QuizApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Question model)
+        public IActionResult Create(Question model, int correctOptionIndex)
         {
-            int questionId = new Random().Next();
-
-            var optionA = new Option
-            {
-                Id = new Random().Next(),
-                QuestionId = questionId,
-                Name = model.OptionA.Name,
-                CreatedAt = DateTimeOffset.UtcNow
-            };
-
-            var optionB = new Option
-            {
-                Id = new Random().Next(),
-                QuestionId = questionId,
-                Name = model.OptionA.Name,
-                CreatedAt = DateTimeOffset.UtcNow
-            };
-
-            var optionC = new Option
-            {
-                Id = new Random().Next(),
-                QuestionId = questionId,
-                Name = model.OptionA.Name,
-                CreatedAt = DateTimeOffset.UtcNow
-            };
-
-            var optionD = new Option
-            {
-                Id = new Random().Next(),
-                QuestionId = questionId,
-                Name = model.OptionA.Name,
-                CreatedAt = DateTimeOffset.UtcNow
-            };
-
             var question = new Question
-            {
-                Id = questionId,
-                Name = model.Name,
-                OptionA = optionA,
-                OptionB = optionB,
-                OptionC = optionC,
-                OptionD = optionD,
+            {                
+                Name = model.Name,                
                 CreatedAt = DateTimeOffset.UtcNow
             };
 
-            MockDbContext.Questions.Add(question);
+            _unitOfWork.Questions.Add(question);
+
+            var options = new List<Option> { model.OptionA, model.OptionB, model.OptionC, model.OptionD };        
+
+            for (int i = 0; i < options.Count; i++)
+            {
+                options[i] = new Option
+                {
+                    QuestionId = question.Id,
+                    Name = options[i].Name,
+                    IsCorrect = i == correctOptionIndex,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                };
+
+                _unitOfWork.Options.Add(options[i]);
+            }
+
+            _unitOfWork.Complete();
 
             return RedirectToAction("Index");
         }

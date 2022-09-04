@@ -24,7 +24,7 @@
                                 @foreach ( var option in question.Options)
                                 {
                                     <li class="list-group-item d-flex align-items-center">
-                                        @*@Html.CheckBoxFor(model => option.IsCorrect, new { @disabled = "disabled" }) *@
+                                        @*@Html.CheckBoxFor(model => option.IsCorrect, new { @disabled = "disabled" })*@
                                         <input class="form-check-input me-2" type="checkbox" disabled @(option.IsCorrect ? "checked='checked'" : string.Empty) />
                                         @option.Name
                                     </li>

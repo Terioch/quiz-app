@@ -30,7 +30,7 @@ namespace QuizApp.Controllers
 
         public IActionResult Question(int id, int selectedOptionId, bool isStart = false)
         {
-            var questions = _unitOfWork.Questions.Get();
+            var questions = _unitOfWork.Questions.Get().ToList();
 
             if (!questions.Any())
             {
@@ -57,14 +57,15 @@ namespace QuizApp.Controllers
                 _score++;
             }           
 
-            // Pagination                        
-            if (questions.LastOrDefault().Id == question.Id)
+            // Pagination
+            int index = questions.IndexOf(question);
+
+            if (index == questions.Count - 1)
             {                
                 return View("Result", _score);
             }
 
-            //var nextQuestion = questions.ElementAt(index + 1);
-            var nextQuestion = questions.GetEnumerator().MoveNext();
+            var nextQuestion = questions.ElementAt(index + 1);           
 
             return View(nextQuestion);
         }        

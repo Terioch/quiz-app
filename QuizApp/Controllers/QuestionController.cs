@@ -16,7 +16,7 @@ namespace QuizApp.Controllers
 
         public IActionResult Index()
         {                 
-            return View(MockDbContext.Questions);
+            return View(_unitOfWork.Questions.Get());
         }
 
         [HttpGet]
@@ -35,6 +35,8 @@ namespace QuizApp.Controllers
             };
 
             _unitOfWork.Questions.Add(question);
+
+            _unitOfWork.Complete();
 
             var options = new List<Option> { model.OptionA, model.OptionB, model.OptionC, model.OptionD };        
 

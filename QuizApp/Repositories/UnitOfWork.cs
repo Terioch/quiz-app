@@ -10,9 +10,12 @@ namespace QuizApp.Repositories
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
+            Quizzes = new QuizRepository(db);
             Questions = new QuestionRepository(db);
             Options = new OptionRepository(db);
         }
+
+        public IRepository<Quiz> Quizzes { get; set; }
 
         public IRepository<Question> Questions { get; private set; }
 

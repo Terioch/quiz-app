@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Quiz>
+
+@{
+    ViewData["Title"] = "Details";
+    int count = 0;
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4>Quizzes</h4>  
+        <a asp-action="Create">Create</a>
+    </div>
+
+    <div class="card-body">        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var quiz in Model)
+                {                    
+                    <tr>
+                        <th scope="row">@count</th>
+                        <td>@quiz.Name</td>
+                        <td>@quiz.Description</td>
+                        <td>@quiz.CreatedAt</td>
+                        <td class="d-flex flex-column">
+                            <a asp-action="Edit" asp-route-id="@quiz.Id" class="link-success">Edit</a>
+                            <a asp-action="Details" asp-route-id="@quiz.Id">Details</a>
+                        </td>
+                    </tr>
+
+                    count++;
+                }                                         
+            </tbody>
+        </table>
+    </div>   
+</div>

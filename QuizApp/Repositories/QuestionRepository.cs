@@ -1,35 +1,21 @@
-﻿using QuizApp.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using QuizApp.Contexts;
 using QuizApp.Models;
 
 namespace QuizApp.Repositories
 {
-    public class QuestionRepository : IRepository<Question>
+    public class QuestionRepository : Repository<Question>, IRepository<Question>
     {
         private readonly ApplicationDbContext _db;
 
-        public QuestionRepository(ApplicationDbContext db)
+        public QuestionRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
-        public IEnumerable<Question> Get()
+        public override IEnumerable<Question> Get()
         {
-            return _db.Questions;
-        }
-
-        public Question Get(int id)
-        {
-            return _db.Questions.Find(id);
-        }
-
-        public void Add(Question entity)
-        {
-            _db.Questions.Add(entity);            
-        }        
-
-        public void Delete(Question entity)
-        {
-            _db.Questions.Remove(entity);
-        }
+            return _db.Questions.Include(x => x.Options);
+        }       
     }
 }

@@ -22,7 +22,7 @@ namespace QuizApp.Models
 
         public DateTimeOffset CreatedAt { get; set; }
 
-        public virtual List<Option> Options { get; set; }
+        public virtual List<Option> Options { get; set; } = new List<Option>();
 
         [NotMapped]
         public string CreatedAtString

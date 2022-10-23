@@ -1,13 +1,29 @@
-﻿@{
+﻿@model IEnumerable<Quiz>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="card">
     <div class="card-header">
-        <h1>Quiz App</h1>                
-    </div>    
+        <h4>Select a quiz to play</h4>       
+    </div>
 
-    <div class="card-body">                
-        <a asp-action="Question" asp-route-id="@ViewBag.QuestionId" asp-route-isStart="true" class="btn btn-primary">Start Quiz</a>
+    <div class="card-body">            
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var quiz in Model)
+            {
+                <div class="col">
+                    <div class="card bg-light">
+                        <img src="~/images/@quiz.ImageName" class="card-img-top" alt="...">
+                        <div class="card-body">
+                          <h5 class="card-title">@quiz.Name</h5>
+                          <p class="card-text">@quiz.Description</p>  
+                          <a asp-action="Quiz" asp-route-id="@quiz.Id" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>        
     </div>
 </div>

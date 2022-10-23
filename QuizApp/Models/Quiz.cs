@@ -10,6 +10,8 @@ namespace QuizApp.Models
 
         public string Description { get; set; }
 
+        public string ImageName { get; set; }
+
         public DateTimeOffset CreatedAt { get; set; }
 
         public virtual List<Question> Questions { get; set; } = new List<Question>();

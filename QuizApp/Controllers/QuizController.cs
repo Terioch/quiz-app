@@ -7,10 +7,12 @@ namespace QuizApp.Controllers
     public class QuizController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public QuizController(IUnitOfWork unitOfWork)
+        public QuizController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -18,10 +20,41 @@ namespace QuizApp.Controllers
             return View(_unitOfWork.Quizzes.Get());
         }
 
+        public IActionResult CreateForm()
+        {
+            return View("Create");
+        }
+
+        public IActionResult Create(Quiz model, IFormFile formFile)
+        {
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
+            string completeFilePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            // Open connection to file system and upload image
+            var fileStream = new FileStream(completeFilePath, FileMode.Create);
+            formFile.CopyTo(fileStream);
+            fileStream.Close();
+
+            var quiz = new Quiz
+            {
+                Name = model.Name,
+                Description = model.Description,
+                ImageName = uniqueFileName,
+                CreatedAt = DateTimeOffset.UtcNow
+            };
+
+            _unitOfWork.Quizzes.Add(quiz);
+
+            _unitOfWork.Complete();
+
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Edit(int id)
         {
             var quiz = _unitOfWork.Quizzes.Get(id);
-            return View();
+            return View(quiz);
         }
 
         public IActionResult Edit(Quiz model)

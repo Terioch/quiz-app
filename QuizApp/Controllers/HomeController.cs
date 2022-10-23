@@ -20,12 +20,15 @@ namespace QuizApp.Controllers
         }
 
         public IActionResult Index()
-        {          
-            var question = _unitOfWork.Questions.Get().FirstOrDefault();
+        {
+            return View(_unitOfWork.Quizzes.Get());
+        }
 
-            ViewBag.QuestionId = question == null ? -1 : question.Id;
+        public IActionResult Quiz(int id)
+        {
+            var quiz = _unitOfWork.Quizzes.Get(id);
 
-            return View();
+            return View(quiz);
         }
 
         public IActionResult Question(int id, int selectedOptionId, bool isStart = false)

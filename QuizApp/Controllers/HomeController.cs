@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QuizApp.Contexts;
 using QuizApp.Models;
 using QuizApp.Repositories;
 using System.Diagnostics;

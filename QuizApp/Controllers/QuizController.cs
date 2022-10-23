@@ -20,11 +20,13 @@ namespace QuizApp.Controllers
             return View(_unitOfWork.Quizzes.Get());
         }
 
-        public IActionResult CreateForm()
+        [HttpGet]
+        public IActionResult Create()
         {
-            return View("Create");
+            return View();
         }
 
+        [HttpPost]
         public IActionResult Create(Quiz model, IFormFile formFile)
         {
             string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
@@ -51,12 +53,14 @@ namespace QuizApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var quiz = _unitOfWork.Quizzes.Get(id);
             return View(quiz);
         }
 
+        [HttpPost]
         public IActionResult Edit(Quiz model)
         {
             var quiz = _unitOfWork.Quizzes.Get(model.Id);
